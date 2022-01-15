@@ -7,8 +7,6 @@
 const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
-const { stat } = require('fs');
-const { type } = require('os');
 
 // The server should respond to all requests with a string
 const server = http.createServer((req, res) => {

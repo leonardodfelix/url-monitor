@@ -15,8 +15,8 @@ const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
 
   // Get the path
-  const path = parsedUrl.pathname;
-  const trimmedPath = path.replace(/^\/+|\/+$/g, '');
+  const { pathname } = parsedUrl;
+  const trimmedPath = pathname.replace(/^\/+|\/+$/g, '');
 
   // Get the query string as an object
   const queryStringObject = parsedUrl.query;
@@ -38,7 +38,7 @@ const server = http.createServer((req, res) => {
     buffer += decoder.end();
     
     // Choose the handler this request should go to. If one is not found, use the notFound handler
-    const chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
+    const chosenHandler = typeof router[trimmedPath] !== 'undefined' ? router[trimmedPath] : handlers.notFound;
 
     // Construct the data object to send to the handler
     const data = {
@@ -61,8 +61,10 @@ const server = http.createServer((req, res) => {
       const payloadString = JSON.stringify(payload);
 
       // Return the response
+      res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
       res.end(payloadString);
+
       // Log the request
       console.log(`Returning this response: ${statusCode} - ${payloadString}`);
     })
